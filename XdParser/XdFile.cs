@@ -24,7 +24,9 @@ namespace XdParser
             {
                 var artworkJsonString = _zipFile.ReadString($"artwork/{xdManifestArtwork.Path}/graphics/graphicContent.agc");
                 var artworkJson = JsonConvert.DeserializeObject<XdArtboardJson>(artworkJsonString);
-                artworks.Add(new XdArtboard(xdManifestArtwork, artworkJson));
+                var resourcesJsonString = _zipFile.ReadString(artworkJson.Resources.Href.TrimStart('/'));
+                var resourceJson = JsonConvert.DeserializeObject<XdResourcesJson>(resourcesJsonString);
+                artworks.Add(new XdArtboard(xdManifestArtwork, artworkJson, resourceJson));
             }
             Artworks = artworks.ToArray();
         }
@@ -48,13 +50,15 @@ namespace XdParser
     {
         public XdManifestChildJson Manifest { get; }
         public XdArtboardJson Artboard { get; }
+        public XdResourcesJson Resources { get; }
 
         public string Name => Manifest.Name;
 
-        public XdArtboard(XdManifestChildJson manifest, XdArtboardJson artboard)
+        public XdArtboard(XdManifestChildJson manifest, XdArtboardJson artboard, XdResourcesJson resources)
         {
             Manifest = manifest;
             Artboard = artboard;
+            Resources = resources;
         }
     }
 }
@@ -279,6 +283,36 @@ namespace XdParser.Internal
         public XdManifestComponentJson[] Components { get; set; }
     }
 
+    public class XdObjectJson
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("meta")]
+        public XdObjectMetaJson Meta { get; set; }
+
+        [JsonProperty("transform")]
+        public XdTransformJson Transform { get; set; }
+
+        [JsonProperty("group")]
+        public XdObjectGroupJson Group { get; set; }
+
+        [JsonProperty("style")]
+        public XdStyleJson Style { get; set; }
+
+        [JsonProperty("shape")]
+        public XdShapeJson Shape { get; set; }
+
+        [JsonProperty("syncSourceGuid")]
+        public string SyncSourceGuid { get; set; }
+    }
+
     public class XdArtboardJson
     {
         [JsonProperty("version")]
@@ -315,7 +349,7 @@ namespace XdParser.Internal
     public class XdArtboardChildArtboardJson
     {
         [JsonProperty("children")]
-        public XdArtboardChildArtboardChildJson[] Children { get; set; }
+        public XdObjectJson[] Children { get; set; }
 
         [JsonProperty("meta")]
         public XdMetaJson Meta { get; set; }
@@ -324,37 +358,37 @@ namespace XdParser.Internal
         public string Ref { get; set; }
     }
 
-    public class XdArtboardChildArtboardChildJson
+    public class XdObjectMetaJson
     {
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("meta")]
-        public XdMetaJson Meta { get; set; }
-
-        [JsonProperty("transform")]
-        public XdTransformJson Transform { get; set; }
-
-        [JsonProperty("group")]
-        public XdArtboardChildArtboardChildGroupJson Group { get; set; }
-
-        [JsonProperty("style")]
-        public XdStyleJson Style { get; set; }
-
-        [JsonProperty("shape")]
-        public XdShapeJson Shape { get; set; }
+        [JsonProperty("ux")]
+        public XdObjectMetaUxJson Ux { get; set; }
     }
 
-    public class XdArtboardChildArtboardChildGroupJson
+    public class XdObjectMetaUxJson
+    {
+        [JsonProperty("symbolId")]
+        public string SymbolId { get; set; }
+
+        [JsonProperty("width")]
+        public float Width { get; set; }
+
+        [JsonProperty("height")]
+        public float Height { get; set; }
+
+        [JsonProperty("componentType")]
+        public string ComponentType { get; set; }
+
+        [JsonProperty("isMaster")]
+        public bool IsMaster { get; set; }
+
+        [JsonProperty("syncMap")]
+        public Dictionary<string, string> SyncMap { get; set; }
+    }
+
+    public class XdObjectGroupJson
     {
         [JsonProperty("children")]
-        public XdArtboardChildArtboardChildJson[] Children { get; set; }
+        public XdObjectJson[] Children { get; set; }
     }
 
     public class XdArtboardResourcesJson
@@ -367,5 +401,126 @@ namespace XdParser.Internal
     {
         [JsonProperty("href")]
         public string Href { get; set; }
+    }
+
+    public class XdResourcesJson
+    {
+        [JsonProperty("version")]
+        public string Version { get; set; }
+
+        [JsonProperty("children")]
+        public XdResourcesChildJson[] Children { get; set; }
+
+        [JsonProperty("resources")]
+        public XdResourcesResourcesJson Resources { get; set; }
+
+        [JsonProperty("artboards")]
+        public Dictionary<string, XdResourcesArtboardsJson> Artboards { get; set; }
+    }
+
+    public class XdResourcesChildJson
+    {
+    }
+
+    public class XdResourcesResourcesJson
+    {
+        [JsonProperty("meta")]
+        public XdResourcesResourcesMetaJson Meta { get; set; }
+
+        [JsonProperty("gradients")]
+        public XdResourcesResourcesGradientsJson Gradients { get; set; }
+
+        [JsonProperty("clipPaths")]
+        public XdResourcesResourcesClipPathsJson ClipPaths { get; set; }
+    }
+
+    public class XdResourcesResourcesMetaJson
+    {
+        [JsonProperty("ux")]
+        public XdResourcesResourcesMetaUxJson Ux { get; set; }
+    }
+
+    public class XdResourcesResourcesMetaUxJson
+    {
+        [JsonProperty("colorSwatches")]
+        public XdResourcesResourcesMetaUxColorSwatcheJson[] ColorSwatches { get; set; }
+
+        [JsonProperty("documentLibrary")]
+        public XdResourcesResourcesMetaUxDocumentLibraryJson DocumentLibrary { get; set; }
+
+        [JsonProperty("gridDefaults")]
+        public XdResourcesResourcesMetaUxGridDefaultsJson GridDefaults { get; set; }
+
+        [JsonProperty("symbols")]
+        public XdObjectJson[] Symbols { get; set; }
+
+        [JsonProperty("symbolsMetadata")]
+        public XdResourcesResourcesMetaUxSymbolsMetadataJson SymbolsMetadata { get; set; }
+    }
+
+    public class XdResourcesResourcesMetaUxColorSwatcheJson
+    {
+    }
+
+    public class XdResourcesResourcesMetaUxDocumentLibraryJson
+    {
+        [JsonProperty("version")]
+        public string Version { get; set; }
+
+        [JsonProperty("isStickerSheet")]
+        public bool IsStickerSheet { get; set; }
+
+        [JsonProperty("hashedMetadata")]
+        public XdResourcesResourcesMetaUxDocumentLibraryHashedMetadataJson HashedMetadata { get; set; }
+
+        [JsonProperty("elements")]
+        public XdResourcesResourcesMetaUxDocumentLibraryHashedElementJson[] Elements { get; set; }
+    }
+
+    public class XdResourcesResourcesMetaUxGridDefaultsJson
+    {
+    }
+
+    public class XdResourcesResourcesMetaUxSymbolsMetadataJson
+    {
+        [JsonProperty("usingNestedSymbolSyncing")]
+        public bool UsingNestedSymbolSyncing { get; set; }
+    }
+
+    public class XdResourcesResourcesMetaUxDocumentLibraryHashedMetadataJson
+    {
+    }
+
+    public class XdResourcesResourcesMetaUxDocumentLibraryHashedElementJson
+    {
+    }
+
+    public class XdResourcesResourcesGradientsJson
+    {
+    }
+
+    public class XdResourcesResourcesClipPathsJson
+    {
+    }
+
+    public class XdResourcesArtboardsJson
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("x")]
+        public float X { get; set; }
+
+        [JsonProperty("y")]
+        public float Y { get; set; }
+
+        [JsonProperty("width")]
+        public float Width { get; set; }
+
+        [JsonProperty("height")]
+        public float Height { get; set; }
+
+        [JsonProperty("viewportHeight")]
+        public float ViewportHeight { get; set; }
     }
 }
