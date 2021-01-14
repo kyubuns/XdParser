@@ -70,19 +70,23 @@ namespace XdParser.Internal
         public static string ReadString(this ZipFile self, string filePath)
         {
             var manifestZipEntry = self.GetEntry(filePath);
-            using var stream = self.GetInputStream(manifestZipEntry);
-            using var reader = new StreamReader(stream);
-            return reader.ReadToEnd();
+            using (var stream = self.GetInputStream(manifestZipEntry))
+            using (var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
         }
 
 
         public static byte[] ReadBytes(this ZipFile self, string filePath)
         {
             var manifestZipEntry = self.GetEntry(filePath);
-            using var stream = self.GetInputStream(manifestZipEntry);
-            using var memoryStream = new MemoryStream();
-            stream.CopyTo(memoryStream);
-            return memoryStream.ToArray();
+            using(var stream = self.GetInputStream(manifestZipEntry))
+            using (var memoryStream = new MemoryStream())
+            {
+                stream.CopyTo(memoryStream);
+                return memoryStream.ToArray();
+            }
         }
     }
 
@@ -116,10 +120,10 @@ namespace XdParser.Internal
         public int D { get; set; }
 
         [JsonProperty("tx")]
-        public int Tx { get; set; }
+        public float Tx { get; set; }
 
         [JsonProperty("ty")]
-        public int Ty { get; set; }
+        public float Ty { get; set; }
     }
 
     public class XdStyleJson
