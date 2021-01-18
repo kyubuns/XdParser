@@ -95,6 +95,12 @@ namespace XdParser.Internal
         [JsonProperty("mode")]
         public string Mode { get; set; }
 
+        [JsonProperty("value")]
+        public XdColorValueJson Value { get; set; }
+    }
+
+    public class XdColorValueJson
+    {
         [JsonProperty("r")]
         public int R { get; set; }
 
@@ -108,22 +114,31 @@ namespace XdParser.Internal
     public class XdTransformJson
     {
         [JsonProperty("a")]
-        public int A { get; set; }
+        public float A { get; set; }
 
         [JsonProperty("b")]
-        public int B { get; set; }
+        public float B { get; set; }
 
         [JsonProperty("c")]
-        public int C { get; set; }
+        public float C { get; set; }
 
         [JsonProperty("d")]
-        public int D { get; set; }
+        public float D { get; set; }
 
         [JsonProperty("tx")]
         public float Tx { get; set; }
 
         [JsonProperty("ty")]
         public float Ty { get; set; }
+    }
+
+    public class XdSizeJson
+    {
+        [JsonProperty("width")]
+        public float Width { get; set; }
+
+        [JsonProperty("height")]
+        public float Height { get; set; }
     }
 
     public class XdStyleJson
@@ -133,6 +148,15 @@ namespace XdParser.Internal
 
         [JsonProperty("stroke")]
         public XdStyleStrokeJson Stroke { get; set; }
+
+        [JsonProperty("font")]
+        public XdStyleFontJson Font { get; set; }
+
+        [JsonProperty("textAttributes")]
+        public XdStyleTextAttributesJson TextAttributes { get; set; }
+
+        [JsonProperty("opacity")]
+        public float? Opacity { get; set; }
     }
 
     public class XdStyleFillJson
@@ -145,6 +169,42 @@ namespace XdParser.Internal
 
         [JsonProperty("pattern")]
         public XdStyleFillPatternJson Pattern { get; set; }
+    }
+
+    public class XdStyleStrokeJson
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("color")]
+        public XdColorJson Color { get; set; }
+
+        [JsonProperty("width")]
+        public float Width { get; set; }
+
+        [JsonProperty("align")]
+        public string Align { get; set; }
+    }
+
+    public class XdStyleFontJson
+    {
+        [JsonProperty("family")]
+        public string Family { get; set; }
+
+        [JsonProperty("postscriptName")]
+        public string PostscriptName { get; set; }
+
+        [JsonProperty("size")]
+        public float Size { get; set; }
+
+        [JsonProperty("style")]
+        public string Style { get; set; }
+    }
+
+    public class XdStyleTextAttributesJson
+    {
+        [JsonProperty("paragraphAlign")]
+        public string ParagraphAlign { get; set; } // default = left
     }
 
     public class XdStyleFillPatternJson
@@ -180,21 +240,6 @@ namespace XdParser.Internal
         public uint HrefLastModifiedDate { get; set; }
     }
 
-    public class XdStyleStrokeJson
-    {
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("color")]
-        public XdColorJson Color { get; set; }
-
-        [JsonProperty("width")]
-        public float Width { get; set; }
-
-        [JsonProperty("align")]
-        public string Align { get; set; }
-    }
-
     public class XdShapeJson
     {
         [JsonProperty("type")]
@@ -211,6 +256,75 @@ namespace XdParser.Internal
 
         [JsonProperty("height")]
         public float Height { get; set; }
+
+        [JsonProperty("path")]
+        public string Path { get; set; }
+
+        [JsonProperty("winding")]
+        public string Winding { get; set; }
+
+        [JsonProperty("cx")]
+        public float Cx { get; set; }
+
+        [JsonProperty("cy")]
+        public float Cy { get; set; }
+
+        [JsonProperty("rx")]
+        public float Rx { get; set; }
+
+        [JsonProperty("ry")]
+        public float Ry { get; set; }
+
+        [JsonProperty("x1")]
+        public float X1 { get; set; }
+
+        [JsonProperty("y1")]
+        public float Y1 { get; set; }
+
+        [JsonProperty("x2")]
+        public float X2 { get; set; }
+
+        [JsonProperty("y2")]
+        public float Y2 { get; set; }
+    }
+
+    public class XdTextJson
+    {
+        [JsonProperty("frame")]
+        public XdTextFrameJson Frame { get; set; }
+
+        [JsonProperty("paragraphs")]
+        public XdTextParagraphJson[] Paragraphs { get; set; }
+
+        [JsonProperty("rawText")]
+        public string RawText { get; set; }
+    }
+
+    public class XdTextFrameJson
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+    }
+
+    public class XdTextParagraphJson
+    {
+        [JsonProperty("lines")]
+        public XdTextParagraphLineJson[][] Lines { get; set; }
+    }
+
+    public class XdTextParagraphLineJson
+    {
+        [JsonProperty("from")]
+        public float From { get; set; }
+
+        [JsonProperty("to")]
+        public float To { get; set; }
+
+        [JsonProperty("x")]
+        public float X { get; set; }
+
+        [JsonProperty("y")]
+        public float Y { get; set; }
     }
 
     public class XdManifestJson
@@ -313,6 +427,12 @@ namespace XdParser.Internal
         [JsonProperty("shape")]
         public XdShapeJson Shape { get; set; }
 
+        [JsonProperty("text")]
+        public XdTextJson Text { get; set; }
+
+        [JsonProperty("guid")]
+        public string Guid { get; set; }
+
         [JsonProperty("syncSourceGuid")]
         public string SyncSourceGuid { get; set; }
     }
@@ -387,6 +507,105 @@ namespace XdParser.Internal
 
         [JsonProperty("syncMap")]
         public Dictionary<string, string> SyncMap { get; set; }
+
+        [JsonProperty("hasCustomName")]
+        public string HasCustomName { get; set; }
+
+        [JsonProperty("aspectLock")]
+        public XdSizeJson AspectLock { get; set; }
+
+        [JsonProperty("customConstraints")]
+        public bool CustomConstraints { get; set; }
+
+        [JsonProperty("constraintWidth")]
+        public bool ConstraintWidth { get; set; }
+
+        [JsonProperty("constraintHeight")]
+        public bool ConstraintHeight { get; set; }
+
+        [JsonProperty("constraintRight")]
+        public bool ConstraintRight { get; set; }
+
+        [JsonProperty("constraintLeft")]
+        public bool ConstraintLeft { get; set; }
+
+        [JsonProperty("constraintTop")]
+        public bool ConstraintTop { get; set; }
+
+        [JsonProperty("constraintBottom")]
+        public bool ConstraintBottom { get; set; }
+
+        [JsonProperty("localTransform")]
+        public XdTransformJson LocalTransform { get; set; }
+
+        [JsonProperty("modTime")]
+        public ulong ModTime { get; set; }
+
+        [JsonProperty("stateId")]
+        public string StateId { get; set; }
+
+        [JsonProperty("states")]
+        public XdObjectJson[] States { get; set; }
+
+        [JsonProperty("interactions")]
+        public XdInteractionJson[] Interactions { get; set; }
+    }
+
+    public class XdInteractionJson
+    {
+        [JsonProperty("data")]
+        public XdInteractionDataJson Data { get; set; }
+
+        [JsonProperty("enabled")]
+        public bool Enabled { get; set; }
+
+        [JsonProperty("guid")]
+        public string Guid { get; set; }
+
+        [JsonProperty("inherited")]
+        public bool Inherited { get; set; }
+
+        [JsonProperty("valid")]
+        public bool Valid { get; set; }
+    }
+
+    public class XdInteractionDataJson
+    {
+        [JsonProperty("interaction")]
+        public XdInteractionDataInteractionJson Interaction { get; set; }
+
+        [JsonProperty("version")]
+        public string Version { get; set; }
+    }
+
+    public class XdInteractionDataInteractionJson
+    {
+        [JsonProperty("action")]
+        public string Action { get; set; }
+
+        [JsonProperty("properties")]
+        public XdInteractionDataInteractionPropertiesJson Properties { get; set; }
+
+        [JsonProperty("triggerEvent")]
+        public string TriggerEvent { get; set; }
+    }
+
+    public class XdInteractionDataInteractionPropertiesJson
+    {
+        [JsonProperty("destination")]
+        public string Destination { get; set; }
+
+        [JsonProperty("duration")]
+        public float Duration { get; set; }
+
+        [JsonProperty("easing")]
+        public string Easing { get; set; }
+
+        [JsonProperty("transition")]
+        public string Transition { get; set; }
+
+        [JsonProperty("voiceLocale")]
+        public string VoiceLocale { get; set; }
     }
 
     public class XdObjectGroupJson
