@@ -97,6 +97,9 @@ namespace XdParser.Internal
 
         [JsonProperty("value")]
         public XdColorValueJson Value { get; set; }
+
+        [JsonProperty("alpha")]
+        public float? Alpha { get; set; }
     }
 
     public class XdColorValueJson
@@ -157,6 +160,9 @@ namespace XdParser.Internal
 
         [JsonProperty("opacity")]
         public float? Opacity { get; set; }
+
+        [JsonProperty("isolation")]
+        public string Isolation { get; set; }
     }
 
     public class XdStyleFillJson
@@ -184,6 +190,18 @@ namespace XdParser.Internal
 
         [JsonProperty("align")]
         public string Align { get; set; }
+
+        [JsonProperty("cap")]
+        public string Cap { get; set; }
+
+        [JsonProperty("join")]
+        public string Join { get; set; }
+
+        [JsonProperty("miterLimit")]
+        public float? MiterLimit { get; set; }
+
+        [JsonProperty("dash")]
+        public float[] Dash { get; set; }
     }
 
     public class XdStyleFontJson
@@ -205,6 +223,9 @@ namespace XdParser.Internal
     {
         [JsonProperty("paragraphAlign")]
         public string ParagraphAlign { get; set; } // default = left
+
+        [JsonProperty("lineHeight")]
+        public float? LineHeight { get; set; }
     }
 
     public class XdStyleFillPatternJson
@@ -238,6 +259,21 @@ namespace XdParser.Internal
 
         [JsonProperty("hrefLastModifiedDate")]
         public uint HrefLastModifiedDate { get; set; }
+
+        [JsonProperty("flipX")]
+        public bool FlipX { get; set; }
+
+        [JsonProperty("flipY")]
+        public bool FlipY { get; set; }
+
+        [JsonProperty("offsetX")]
+        public float OffsetX { get; set; }
+
+        [JsonProperty("offsetY")]
+        public float OffsetY { get; set; }
+
+        [JsonProperty("scale")]
+        public float? Scale { get; set; }
     }
 
     public class XdShapeJson
@@ -286,6 +322,9 @@ namespace XdParser.Internal
 
         [JsonProperty("y2")]
         public float Y2 { get; set; }
+
+        [JsonProperty("R")]
+        public object R { get; set; }
     }
 
     public class XdTextJson
@@ -304,6 +343,12 @@ namespace XdParser.Internal
     {
         [JsonProperty("type")]
         public string Type { get; set; }
+
+        [JsonProperty("width")]
+        public float Width { get; set; }
+
+        [JsonProperty("height")]
+        public float Height { get; set; }
     }
 
     public class XdTextParagraphJson
@@ -378,11 +423,6 @@ namespace XdParser.Internal
         public float Height { get; set; }
     }
 
-    public class XdMetaJson
-    {
-        // not implemented
-    }
-
     public class XdManifestChildJson
     {
         [JsonProperty("id")]
@@ -435,6 +475,12 @@ namespace XdParser.Internal
 
         [JsonProperty("syncSourceGuid")]
         public string SyncSourceGuid { get; set; }
+
+        [JsonProperty("visible")]
+        public bool Visible { get; set; } = true;
+
+        [JsonProperty("markedForExport")]
+        public bool MarkedForExport { get; set; }
     }
 
     public class XdArtboardJson
@@ -461,7 +507,7 @@ namespace XdParser.Internal
         public string Id { get; set; }
 
         [JsonProperty("meta")]
-        public XdMetaJson Meta { get; set; }
+        public XdObjectMetaJson Meta { get; set; }
 
         [JsonProperty("style")]
         public XdStyleJson Style { get; set; }
@@ -476,7 +522,7 @@ namespace XdParser.Internal
         public XdObjectJson[] Children { get; set; }
 
         [JsonProperty("meta")]
-        public XdMetaJson Meta { get; set; }
+        public XdObjectMetaJson Meta { get; set; }
 
         [JsonProperty("ref")]
         public string Ref { get; set; }
@@ -490,6 +536,9 @@ namespace XdParser.Internal
 
     public class XdObjectMetaUxJson
     {
+        [JsonProperty("nameL10N")]
+        public string NameL10N { get; set; }
+
         [JsonProperty("symbolId")]
         public string SymbolId { get; set; }
 
@@ -549,6 +598,69 @@ namespace XdParser.Internal
 
         [JsonProperty("interactions")]
         public XdInteractionJson[] Interactions { get; set; }
+
+        [JsonProperty("repeatGrid")]
+        public XdRepeatGridJson RepeatGrid { get; set; }
+
+        [JsonProperty("scrollingType")]
+        public string ScrollingType { get; set; }
+
+        [JsonProperty("viewportWidth")]
+        public float ViewportWidth { get; set; }
+
+        [JsonProperty("viewportHeight")]
+        public float ViewportHeight { get; set; }
+
+        [JsonProperty("offsetX")]
+        public float OffsetX { get; set; }
+
+        [JsonProperty("offsetY")]
+        public float OffsetY { get; set; }
+
+        [JsonProperty("markedForExport")]
+        public bool MarkedForExport { get; set; }
+
+        [JsonProperty("clipPathResources")]
+        public XdClipPathResourcesJson ClipPathResources { get; set; }
+
+        [JsonProperty("rotation")]
+        public float Rotation { get; set; }
+    }
+
+    public class XdClipPathResourcesJson
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("children")]
+        public XdObjectJson[] Children { get; set; }
+    }
+
+    public class XdRepeatGridJson
+    {
+        [JsonProperty("cellWidth")]
+        public float? CellWidth { get; set; }
+
+        [JsonProperty("cellHeight")]
+        public float? CellHeight { get; set; }
+
+        [JsonProperty("width")]
+        public float Width { get; set; }
+
+        [JsonProperty("height")]
+        public float Height { get; set; }
+
+        [JsonProperty("paddingX")]
+        public float PaddingX { get; set; }
+
+        [JsonProperty("paddingY")]
+        public float PaddingY { get; set; }
+
+        [JsonProperty("columns")]
+        public int Columns { get; set; }
+
+        [JsonProperty("rows")]
+        public int Rows { get; set; }
     }
 
     public class XdInteractionJson
